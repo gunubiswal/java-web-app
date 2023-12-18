@@ -25,7 +25,8 @@ pipeline {
             steps {
                 script {
                     echo "Deployment started"
-                    deploy adapters: [tomcat9(url: 'http://13.229.129.215:8080/', credentialsId:'tomcred')], war 
+                    deploy adapters: [tomcat9(url: 'http://13.229.129.215:8080/', credentialsId:'tomcatcred')], contextPath: "welcomeapp", war: "**/*.war"
+                 
                 }
             }
         }    
