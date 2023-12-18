@@ -14,13 +14,13 @@ pipeline {
 
                 }
             }
-        }
-        stage("Build code")
+        stage("Build code") {
              steps{
                 echo "Build Code started"
                 sh "mvn Clean package"
                 echo "Build Code Completed"
              }
+        }   
         stage("Deployment") {
             steps {
                 script {
