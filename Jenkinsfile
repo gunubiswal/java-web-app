@@ -4,28 +4,36 @@ pipeline {
     tools {
         maven 'maven3.9'
     }
-    stages {
-        stage("checkout code") {
-            steps {
-                    echo "checkout code started"
-                    git branch: 'main', url: 'https://github.com/gunubiswal/java-web-app.git'
-                    echo "checkout completed"
 
+    stages {
+        stage("Checkout Code") {
+            steps {
+                script {
+                    echo "Checking out code..."
+                    git branch: 'main', url: 'https://github.com/gunubiswal/java-web-app.git'
+                    echo "Checkout completed."
+                }
             }
         }
-        stage("Build code") {
-             steps {
-	     	echo "Build Code started"
+
+        stage("Build Code") {
+            steps {
+                echo "Building Code..."
                 sh "mvn clean package"
-                echo "Build Code Completed"
-             }
-        }   
+                echo "Build completed."
+            }
+        }
+
         stage("Deployment") {
             steps {
-                    echo "Deployment started"
-                    deploy adapters: [tomcat9(url: 'http://13.229.129.215:8080/', credentialsId:'tomcatcred')], war: 'target/*.war'
-                 
+                script {
+                    echo "Deploying to Tomcat..."
+                    deploy adapters: [tomcat9(url: 'http://13.229.129.215:8080/', credentialsId: 'tomcatcred')],
+                           contextPath: "welcomeapp", war: "**/*.war"
+                    echo "Deployment completed."
+                }
             }
         }
-     }    
+    }
+
 }
