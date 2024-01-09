@@ -1,32 +1,19 @@
-pipeline{
-	agent any
-	tools{
-		maven 'maven3.9'
-		}
-		stages{
-			stage("CheckoutCode"){
-				steps{
-					echo "Checkout started"
-					git branch: 'main',url: 'https://github.com/gunubiswal/java-web-app.git'
-					echo "checkout completed"
-				}
-			}
-		
-			stage("BuildCode"){
-				steps{
-					echo "Build started"
-					sh 'mvn clean package'
-					echo "Build completed"
-				}
-			}
-			stage("Deployment"){
-				steps{
-					echo "deployment started"
-					deploy adapters: [tomcat9(credentialsId: 'tomcatcred',url:'http://13.229.129.215:8080/')],contextPath: 'welcomeapp',war: '*/.war'
-					echo "Deployemnt completed"
-				}
-			}
-
-		}
-	
+pipeline {
+    agent {
+        node {
+            label 'jenkins-slave-node'
+        }
+    }
+    environment {
+        PATH = "/opt/apache-maven-3.9.6/bin:$PATH"
+    }
+    stages {
+        stage("build"){
+            steps {
+                echo "----------- build started ----------"
+                sh 'mvn clean package -Dmaven.test.skip=true'
+                echo "----------- build complted ----------"
+            }
+        }
+    }
 }
